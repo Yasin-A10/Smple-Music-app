@@ -27,7 +27,7 @@ class NotFoundScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    'assets/images/Residences/Not-Found.jpg',
+                    'assets/images/Not-Found.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
