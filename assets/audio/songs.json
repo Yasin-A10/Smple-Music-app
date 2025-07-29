@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "title": "IDEA 1",
+    "artist": "Billie Eilish",
+    "assetPath": "audio/idea1.mp3",
+    "coverImage": "assets/images/idea1.png"
+  },
+  {
+    "id": "2",
+    "title": "IDEA 22",
+    "artist": "Aurora",
+    "assetPath": "audio/idea22.mp3",
+    "coverImage": "assets/images/idea22.png"
+  },
+  {
+    "id": "3",
+    "title": "Jelly Bun",
+    "artist": "Travis Scott",
+    "assetPath": "audio/JellyBun.mp3",
+    "coverImage": "assets/images/JellyBun.png"
+  },
+  {
+    "id": "4",
+    "title": "Remember Me",
+    "artist": "Arcane",
+    "assetPath": "audio/RememberMe.mp3",
+    "coverImage": "assets/images/RememberMe.png"
+  },
+  {
+    "id": "5",
+    "title": "What Could Have Been",
+    "artist": "Arcane",
+    "assetPath": "audio/WhatCouldHaveBeen.mp3",
+    "coverImage": "assets/images/WhatCouldHaveBeen.png"
+  }
+]
