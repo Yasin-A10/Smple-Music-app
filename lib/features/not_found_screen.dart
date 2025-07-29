@@ -12,7 +12,7 @@ class NotFoundScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'صفحه مورد نظر پیدا نشد!',
+          'Not Found Page!',
           style: TextStyle(color: AppColors.green),
         ),
       ),
@@ -34,7 +34,7 @@ class NotFoundScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => context.go('/home'),
+                onPressed: () => context.go('/playlist'),
                 child: const Text('خانه'),
               ),
             ],
