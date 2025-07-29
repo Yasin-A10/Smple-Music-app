@@ -1,23 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_app/core/widgets/my_drawer.dart';
 import '../bloc/audio_player_bloc.dart';
 import '../bloc/audio_player_event.dart';
 import '../bloc/audio_player_state.dart';
+import '../../domain/entities/song.dart';
+import 'package:go_router/go_router.dart';
 
-class AudioPlayerScreen extends StatelessWidget {
-  const AudioPlayerScreen({super.key});
+class AudioPlayerScreen extends StatefulWidget {
+  final Song initialSong;
+  const AudioPlayerScreen({super.key, required this.initialSong});
+
+  @override
+  State<AudioPlayerScreen> createState() => _AudioPlayerScreenState();
+}
+
+class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
+  bool _didPlay = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // فقط یکبار هنگام نمایش صفحه، موزیک انتخابی را پخش کن
+    if (!_didPlay) {
+      context.read<AudioPlayerBloc>().add(PlaySongEvent(widget.initialSong));
+      _didPlay = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('پخش موزیک'), centerTitle: true),
+      drawer: const MyDrawer(),
+      appBar: AppBar(
+        title: const Text(
+          'M U S I C',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: () => context.go('/playlist'),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
           builder: (context, state) {
             final playlist = state.playlist;
             if (playlist.isEmpty) {
               return const Center(
-                child: Text('هیچ موزیکی برای پخش وجود ندارد'),
+                child: Text('No music available for playback'),
               );
             }
             final song = playlist[state.currentIndex];
@@ -45,8 +79,8 @@ class AudioPlayerScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       song.coverImage!,
-                      width: 250,
-                      height: 250,
+                      width: 270,
+                      height: 270,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -54,30 +88,26 @@ class AudioPlayerScreen extends StatelessWidget {
                 ],
                 Text(
                   song.title,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   song.artist,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 32),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     children: [
-                      // Slider(
-                      //   min: 0,
-                      //   max: total.inSeconds > 0
-                      //       ? total.inSeconds.toDouble()
-                      //       : 1,
-                      //   value: position.inSeconds
-                      //       .clamp(0, total.inSeconds)
-                      //       .toDouble(),
-                      //   onChanged: (value) {
-                      //     // TODO: پیاده‌سازی seek اگر نیاز
-                      //   },
-                      // ),
                       Slider(
                         min: 0,
                         max: total.inSeconds > 0
@@ -93,17 +123,20 @@ class AudioPlayerScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(formatTime(position)),
-                          Text(formatTime(total)),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(formatTime(position)),
+                            Text(formatTime(total)),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 32),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -22,7 +22,7 @@ class SongTile extends StatelessWidget {
       title: Text(song.title),
       subtitle: Text(song.artist),
       onTap: () {
-        context.push('/song/${song.id}');
+        context.push('/song/${song.id}', extra: song);
       },
     );
   }

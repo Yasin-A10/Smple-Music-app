@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:music_app/features/music/domain/entities/song.dart';
 
 @immutable
 sealed class AudioPlayerEvent {}
@@ -19,4 +20,9 @@ class PositionChangedEvent extends AudioPlayerEvent {
 class SeekEvent extends AudioPlayerEvent {
   final Duration position;
   SeekEvent(this.position);
+}
+
+class PlaySongEvent extends AudioPlayerEvent {
+  final Song song;
+  PlaySongEvent(this.song);
 }

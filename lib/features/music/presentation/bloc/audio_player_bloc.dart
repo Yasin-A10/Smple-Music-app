@@ -30,6 +30,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     on<PreviousEvent>(_onPrevious);
     on<PositionChangedEvent>(_onPositionChanged);
     on<SeekEvent>(_onSeek);
+    on<PlaySongEvent>(_onPlaySong);
   }
 
   Future<void> _onLoadPlaylist(
@@ -120,6 +121,40 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
   Future<void> _onSeek(SeekEvent event, Emitter<AudioPlayerState> emit) async {
     await seekAudio.call(event.position);
     emit(state.copyWith(position: event.position));
+  }
+
+  Future<void> _onPlaySong(
+    PlaySongEvent event,
+    Emitter<AudioPlayerState> emit,
+  ) async {
+    // اگر هنوز لیست لود نشده، ابتدا لود کن
+    if (state.playlist.isEmpty) {
+      final list = await getPlaylist.call();
+      emit(state.copyWith(playlist: list));
+    }
+    // پیدا کردن اندیس موزیک انتخاب‌شده
+    final idx = state.playlist.indexWhere((s) => s.id == event.song.id);
+    if (idx < 0) return;
+
+    // قطع اشتراک قبلی و پخش ترک جدید
+    _positionSub?.cancel();
+    await playAudio.call(event.song.assetPath);
+
+    // تنظیم State
+    final total = await playAudio.repo.getDuration() ?? Duration.zero;
+    emit(
+      state.copyWith(
+        currentIndex: idx,
+        total: total,
+        position: Duration.zero,
+        isPlaying: true,
+      ),
+    );
+
+    // دوباره اشتراک تغییرات موقعیت
+    _positionSub = playAudio.repo.getPositionStream().listen((pos) {
+      add(PositionChangedEvent(pos));
+    });
   }
 
   @override
