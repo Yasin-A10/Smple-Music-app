@@ -21,10 +21,6 @@ final GoRouter appRouter = GoRouter(
       path: RoutePaths.playlist,
       builder: (context, state) => const PlaylistScreen(),
     ),
-    // GoRoute(
-    //   path: RoutePaths.music,
-    //   builder: (context, state) => const AudioPlayerScreen(),
-    // ),
     GoRoute(
       path: RoutePaths.music,
       builder: (context, state) {
