@@ -14,11 +14,11 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     Emitter<SettingState> emit,
   ) async {
     final currentMode = state.isDarkMode;
-    // ابتدا حالت لودینگ برای حفظ UI
+
     emit(SettingLoading(currentMode));
     try {
       final newMode = !currentMode;
-      // شبیه‌سازی تأخیر
+
       await Future.delayed(const Duration(milliseconds: 200));
       emit(SettingLoaded(newMode));
     } catch (e) {
